@@ -18,3 +18,15 @@
   font-weight: lighter;
   line-height: 22px;
 }
+
+.ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
+  background-color: #fff;
+
+  &:after {
+    background-color: #20bec8;
+    width: 24px;
+    height: 24px;
+    margin-block-start: -12px;
+    margin-inline-start: -12px;
+  }
+}

@@ -20,13 +20,39 @@
 }
 
 .ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
-  background-color: #fff;
+  background-color: var(--color-background);
 
   &:after {
-    background-color: #20bec8;
+    background-color: var(--primaryColor);
     width: 24px;
     height: 24px;
     margin-block-start: -12px;
     margin-inline-start: -12px;
   }
+}
+
+.ant-btn {
+  &:not(.ant-btn-ghost) {
+    padding: 11px 24px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+  }
+}
+
+
+html[data-theme="dark"]::view-transition-old(root) {
+  z-index: 1;
+}
+
+html[data-theme="dark"]::view-transition-new(root) {
+  z-index: 999;
+}
+
+html::view-transition-old(root) {
+  z-index: 999;
+}
+
+html::view-transition-new(root) {
+  z-index: 1;
 }

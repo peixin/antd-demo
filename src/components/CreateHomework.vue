@@ -2,7 +2,14 @@
   <div class="main">
     <div class="block header">
       新增作业
-      <a-button type="ghost" shape="circle" :icon="h(CloseOutlined)" />
+      <a-space :size="4">
+        <a-button type="ghost" shape="circle" @click="themeChanged">
+          <img v-if="theme === 'dark'" src="@/assets/svg/sun.svg" width="20" height="20" />
+          <img v-else src="@/assets/svg/moon.svg" width="20" height="20" />
+        </a-button>
+
+        <a-button type="ghost" shape="circle" :icon="h(CloseOutlined)" />
+      </a-space>
     </div>
     <div class="block">
       <!-- a-row a-col 不好用 -->
@@ -250,8 +257,9 @@
       </div>
     </div>
     <div class="block footer">
-      <a-button type="primary">保存</a-button>
-      <a-button>取消</a-button>
+      <a-button type="primary" :loading="isLoading" @click="save">保存</a-button>
+      <a-button type="default" @click="cancel">取消</a-button>
+      <a-button type="primary" disabled>primary 保存 disabled</a-button>
     </div>
   </div>
 </template>
@@ -262,6 +270,16 @@ import { h, ref } from 'vue'
 import type { SelectProps, UploadChangeParam } from 'ant-design-vue'
 import { message } from 'ant-design-vue'
 import { CloseOutlined, PlusOutlined, QuestionCircleFilled } from '@ant-design/icons-vue'
+
+const emit = defineEmits<{
+  themeChanged: [value: 'light' | 'dark', event: MouseEvent]
+}>()
+
+const theme = ref<'light' | 'dark'>('light')
+const themeChanged = (event: MouseEvent) => {
+  theme.value = theme.value === 'light' ? 'dark' : 'light'
+  emit('themeChanged', theme.value, event)
+}
 
 // 分组方案
 const groupValue = ref<number | undefined>(undefined)
@@ -362,6 +380,16 @@ const completeIndicatorValueOptions = ref<SelectProps['options']>([
     label: `达到80分`
   }
 ])
+
+const isLoading = ref(false)
+
+const save = () => {
+  isLoading.value = true
+}
+
+const cancel = () => {
+  isLoading.value = false
+}
 </script>
 
 <style scoped>
@@ -386,7 +414,7 @@ const completeIndicatorValueOptions = ref<SelectProps['options']>([
       &.required {
         &::before {
           content: '*';
-          color: red;
+          color: var(--dangerColor);
           margin-right: 6px;
         }
       }
@@ -399,7 +427,7 @@ const completeIndicatorValueOptions = ref<SelectProps['options']>([
   }
 
   .header {
-    color: #333;
+    color: var(--color-text3);
     font-size: 16px;
     display: flex;
     align-items: center;
@@ -407,7 +435,7 @@ const completeIndicatorValueOptions = ref<SelectProps['options']>([
 
     & svg {
       font-size: 18px;
-      color: #70748c;
+      color: var(--color-text4);
     }
   }
 
@@ -449,8 +477,8 @@ const completeIndicatorValueOptions = ref<SelectProps['options']>([
   align-items: center;
   gap: 6px;
   border-radius: 4px;
-  border: 1px solid #b3b3b3;
-  background: #f4f4f4;
+  border: 1px solid var(--color-border2);
+  background: var(--color-background2);
   cursor: pointer;
 
   > span {
@@ -468,20 +496,20 @@ const completeIndicatorValueOptions = ref<SelectProps['options']>([
   border-collapse: collapse;
   width: 488px;
   border-radius: 4px;
-  border: 1px solid #dfdfdf;
-  background: #fff;
+  border: 1px solid var(--color-border2);
+  background: var(--color-background);
 
   & tr,
   th,
   td {
-    border: 1px solid #dfdfdf;
+    border: 1px solid var(--color-border2);
     padding: 16px;
     align-items: flex-start;
     justify-content: center;
   }
 
   .grayBg {
-    background: #f7f7f7;
+    background: var(--color-background3);
   }
 
   & td {
@@ -511,7 +539,7 @@ const completeIndicatorValueOptions = ref<SelectProps['options']>([
 }
 
 .tips1 {
-  color: #737373;
+  color: var(--color-text2);
   font-size: 13px;
   font-weight: 400;
   line-height: 20px;
@@ -520,14 +548,14 @@ const completeIndicatorValueOptions = ref<SelectProps['options']>([
 .tips2 {
   padding: 12px;
   border-radius: 3px;
-  background: #e9e9e9;
+  background: var(--color-background4);
   display: flex;
   width: 279px;
   margin-top: 12px;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  color: #4d4d4d;
+  color: var(--color-background5);
   font-size: 13px;
   font-style: normal;
   font-weight: 400;
@@ -540,7 +568,7 @@ const completeIndicatorValueOptions = ref<SelectProps['options']>([
       height: 0;
       border-width: 0 6px 6px;
       border-style: solid;
-      border-color: transparent transparent #e9e9e9;
+      border-color: transparent transparent var(--color-background4);
       position: absolute;
       left: 24px;
       top: -6px;

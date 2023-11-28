@@ -174,7 +174,7 @@
             <div class="flex flex-items-center">
               <div class="title required">作业截止时间</div>
               <div class="flex-auto">
-                <a-date-picker show-time placeholder="Select Time" />
+                <a-date-picker show-time placeholder="" />
               </div>
             </div>
             <div class="flex flex-items-center">
@@ -187,7 +187,7 @@
                 <a-range-picker
                   :show-time="{ format: 'HH:mm' }"
                   format="YYYY-MM-DD HH:mm"
-                  :placeholder="['Start Time', 'End Time']"
+                  :placeholder="['互评开始时间', '互评结束时间']"
                 >
                   <template v-slot:separator>至</template>
                 </a-range-picker>
@@ -216,8 +216,14 @@
               :min="0"
               :max="100"
               :step="0.1"
+              :tip-formatter="sliderFormatter"
+              :marks="sliderMarks"
               style="width: 336px"
-            />
+            >
+              <template #mark="{ label }">
+                <span class="sliderMark">{{ label }}</span>
+              </template>
+            </a-slider>
             <a-input-number
               v-model:value="scorePercent"
               :min="0"
@@ -390,6 +396,19 @@ const save = () => {
 const cancel = () => {
   isLoading.value = false
 }
+
+const sliderFormatter = (value: number) => {
+  return `${value}%`
+}
+const sliderMarks = ref<Record<number, any>>({
+  35.6: '35.6',
+  100: {
+    // style: {
+    //   color: '#f50',
+    // },
+    label: '100'
+  }
+})
 </script>
 
 <style scoped>
@@ -574,5 +593,19 @@ const cancel = () => {
       top: -6px;
     }
   }
+}
+</style>
+
+<style>
+.ant-slider.ant-slider-with-marks.ant-slider-horizontal .ant-slider-mark {
+  top: -20px;
+}
+
+.ant-slider-step .ant-slider-dot {
+  width: 2px;
+  height: 8px;
+  border: none;
+  background: #f0f0f0;
+  top: -5px;
 }
 </style>
